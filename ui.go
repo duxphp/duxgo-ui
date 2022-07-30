@@ -1,4 +1,4 @@
-package duxgo_ui
+package ui
 
 import (
 	"embed"
