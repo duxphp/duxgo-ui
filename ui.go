@@ -3,7 +3,6 @@ package ui
 import (
 	"embed"
 	"github.com/duxphp/duxgo/bootstrap"
-	"github.com/duxphp/duxgo/core"
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
 )
@@ -17,7 +16,7 @@ var ConfigManifest map[string]any
 // New UI库
 func New(t *bootstrap.Bootstrap) {
 	// 解析媒体文件
-	jsonPath, err := core.StaticFs.Open("public/manifest.json")
+	jsonPath, err := StaticFs.Open("public/manifest.json")
 	if err != nil {
 		panic(err.Error())
 	}
