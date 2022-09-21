@@ -1,13 +1,22 @@
 {
+  "src/assets/images/logo.svg": {
+    "file": "static/manage/logo.d66db2fc.svg",
+    "src": "src/assets/images/logo.svg"
+  },
+  "src/assets/images/login-foot.png": {
+    "file": "static/manage/login-foot.1c6cc2f5.png",
+    "src": "src/assets/images/login-foot.png"
+  },
+  "src/assets/images/login-side.png": {
+    "file": "static/manage/login-side.19d425f0.png",
+    "src": "src/assets/images/login-side.png"
+  },
   "src/main.js": {
-    "file": "static/manage/main.69f42905.js",
+    "file": "static/manage/main.d6018924.js",
     "src": "src/main.js",
     "isEntry": true,
-    "imports": [
-      "_vendor.7f27a36a.js"
-    ],
     "css": [
-      "static/manage/main.c4fb300a.css"
+      "static/manage/main.6526c448.css"
     ],
     "assets": [
       "static/manage/logo.d66db2fc.svg",
@@ -15,7 +24,8 @@
       "static/manage/login-side.19d425f0.png"
     ]
   },
-  "_vendor.7f27a36a.js": {
-    "file": "static/manage/vendor.7f27a36a.js"
+  "src/main.css": {
+    "file": "static/manage/main.6526c448.css",
+    "src": "src/main.css"
   }
 }
