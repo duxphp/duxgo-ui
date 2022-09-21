@@ -54,6 +54,7 @@ func (a *Radio) Render(element node.IField) *node.TNode {
 			options = append(options, map[string]any{
 				"nodeName": "a-radio",
 				"child": map[string]any{
+					"vSlot:radio": "{checked: true}",
 					"nodeName":    "a-space",
 					"align":       "start",
 					"class":       "custom-radio-card",
@@ -84,8 +85,7 @@ func (a *Radio) Render(element node.IField) *node.TNode {
 						},
 					},
 				},
-				"value":       item.Key,
-				"vSlot:radio": "{checked: true}",
+				"value": item.Key,
 			})
 		} else {
 			options = append(options, map[string]any{
