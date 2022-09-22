@@ -7,13 +7,12 @@ import (
 	"github.com/duxphp/duxgo/core"
 	exception2 "github.com/duxphp/duxgo/exception"
 	"github.com/duxphp/duxgo/util/function"
-	"github.com/go-playground/validator/v10"
-	"github.com/labstack/echo/v4"
 	"github.com/mitchellh/mapstructure"
 	"github.com/samber/lo"
 	"github.com/spf13/cast"
 	"gorm.io/gorm"
 	"reflect"
+	"strings"
 )
 
 type Form struct {
@@ -137,7 +136,7 @@ func (t *Form) AddHeader(widget node.IWidget) {
 }
 
 // AddLayout 添加布局元素
-func (t *Form) AddLayout(element ILayout, callback func(form *Form)) {
+func (t *Form) AddLayout(element ILayout, callback func(form *Form)) *Element {
 	element.SetData(t.info)
 	element.SetDialog(t.dialog)
 	elm := Element{
@@ -145,10 +144,11 @@ func (t *Form) AddLayout(element ILayout, callback func(form *Form)) {
 	}
 	t.element = append(t.element, &elm)
 	element.Column(callback)
+	return &elm
 }
 
 // AddColumn 添加多列布局
-func (t *Form) AddColumn(element ILayout, callback func(element ILayout)) {
+func (t *Form) AddColumn(element ILayout, callback func(element ILayout)) *Element {
 	element.SetData(t.info)
 	element.SetDialog(t.dialog)
 	elm := Element{
@@ -156,20 +156,32 @@ func (t *Form) AddColumn(element ILayout, callback func(element ILayout)) {
 	}
 	t.element = append(t.element, &elm)
 	callback(element.(ILayout))
+	return &elm
 }
 
 // RenderElement 渲染列表
 func (t *Form) RenderElement() []*node.TNode {
 	var element []*node.TNode
 	for _, item := range t.element {
+		var el node.TNode
 		if item.UI != nil {
 			// 普通UI
-			element = append(element, item.Render())
+			el = *item.Render()
 		}
 		if item.Layout != nil {
 			// 布局UI
-			element = append(element, item.Layout.Render())
+			el = *item.Layout.Render()
 		}
+
+		// 切换类型
+		if item.Switch != nil {
+			condition := make([]string, 0)
+			for _, s := range item.Switch {
+				condition = append(condition, fmt.Sprintf("data.%s == '%s'", s.Field, s.Value))
+			}
+			el["vIf"] = strings.Join(condition, " || ")
+		}
+		element = append(element, &el)
 	}
 	return element
 }

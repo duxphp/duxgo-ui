@@ -36,9 +36,16 @@ type Element struct {
 	Must     bool
 	Verify   []map[string]string
 	Format   func(value any) any
+	Switch   []*ElementSwitch
 	Value    *any
 	UI       IElement
 	Layout   ILayout
+}
+
+// ElementSwitch 元素切换
+type ElementSwitch struct {
+	Field string
+	Value any
 }
 
 // SetDefault 设置默认值
@@ -110,6 +117,15 @@ func (a *Element) SaveFormat(callback func(value any) any) *Element {
 
 // SetType 设置类型
 func (a *Element) SetType() *Element {
+	return a
+}
+
+// SetSwitch 设置切换
+func (a *Element) SetSwitch(field string, value any) *Element {
+	a.Switch = append(a.Switch, &ElementSwitch{
+		Field: field,
+		Value: value,
+	})
 	return a
 }
 
