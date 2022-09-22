@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"github.com/duxphp/duxgo-ui/lib/node"
 	"github.com/duxphp/duxgo/core"
-	exception2 "github.com/duxphp/duxgo/exception"
+	"github.com/duxphp/duxgo/exception"
 	"github.com/duxphp/duxgo/util/function"
+	"github.com/go-playground/validator/v10"
+	"github.com/labstack/echo/v4"
 	"github.com/mitchellh/mapstructure"
 	"github.com/samber/lo"
 	"github.com/spf13/cast"
@@ -279,7 +281,7 @@ func (t *Form) Save(ctx echo.Context) error {
 				err := t.validate.Var(postData[item.Field], val["role"])
 				if err != nil {
 					if val["message"] != "" {
-						return exception2.ParameterError(val["message"])
+						return exception.ParameterError(val["message"])
 					}
 					return err
 				}
@@ -351,7 +353,7 @@ func (t *Form) Save(ctx echo.Context) error {
 			var pNum int64
 			transaction.Model(t.model).Where(t.primary+" = ?", tmpId).Count(&pNum)
 			if pNum == 0 {
-				return exception2.BusinessError("parent data does not exist")
+				return exception.BusinessError("parent data does not exist")
 			}
 		}
 
@@ -365,13 +367,13 @@ func (t *Form) Save(ctx echo.Context) error {
 		err = mode.Create(data).Error
 	}
 	if err != nil {
-		return exception2.Error(err)
+		return exception.Error(err)
 	}
 	if t.key == 0 {
 		lastData := map[string]any{}
 		err = transaction.Model(t.model).Select(t.primary).Last(&lastData).Error
 		if err != nil {
-			return exception2.Error(err)
+			return exception.Error(err)
 		}
 		t.key = cast.ToUint(lastData[t.primary])
 	}
@@ -379,7 +381,7 @@ func (t *Form) Save(ctx echo.Context) error {
 	// 查询数据
 	err = transaction.Model(t.model).Find(t.model, t.key).Error
 	if err != nil {
-		return exception2.Error(err)
+		return exception.Error(err)
 	}
 	marshal, _ := json.Marshal(t.model)
 	json.Unmarshal(marshal, &t.info)
