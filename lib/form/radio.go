@@ -13,7 +13,7 @@ type RadioOptions struct {
 // Radio 文本输入框
 type Radio struct {
 	options []RadioOptions
-	box     bool
+	card    bool
 }
 
 // NewRadio 创建文本
@@ -27,9 +27,9 @@ func (a *Radio) SetOptions(options []RadioOptions) *Radio {
 	return a
 }
 
-// SetBox 设置盒模式
-func (a *Radio) SetBox(status bool) *Radio {
-	a.box = status
+// SetCard 设置盒模式
+func (a *Radio) SetCard(status bool) *Radio {
+	a.card = status
 	return a
 }
 
@@ -50,24 +50,15 @@ func (a *Radio) SaveValue(value any, data map[string]any) any {
 func (a *Radio) Render(element node.IField) *node.TNode {
 	var options []map[string]any
 	for _, item := range a.options {
-		if a.box {
+		if a.card {
 			options = append(options, map[string]any{
 				"nodeName": "a-radio",
 				"child": map[string]any{
-					"vSlot:radio": "{checked: true}",
+					"vSlot:radio": "{checked}",
 					"nodeName":    "a-space",
 					"align":       "start",
-					"class":       "custom-radio-card",
-					"vBind:class": "{ 'custom-radio-card-checked': checked }",
+					"vBind:class": "checked ? 'custom-radio-card custom-radio-card-checked' : 'custom-radio-card'",
 					"child": []map[string]any{
-						{
-							"nodeName": "div",
-							"class":    "custom-radio-card-mask",
-							"child": map[string]any{
-								"nodeName": "div",
-								"class":    "custom-radio-card-mask-dot",
-							},
-						},
 						{
 							"nodeName": "div",
 							"child": []map[string]any{
