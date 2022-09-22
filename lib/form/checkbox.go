@@ -4,37 +4,37 @@ import (
 	"github.com/duxphp/duxgo-ui/lib/node"
 )
 
-type RadioOptions struct {
+type CheckboxOptions struct {
 	Key  any
 	Name any
 	Desc any
 }
 
-// Radio 单选框
-type Radio struct {
-	options []RadioOptions
+// Checkbox 多选框
+type Checkbox struct {
+	options []CheckboxOptions
 	card    bool
 }
 
-// NewRadio 创建单选
-func NewRadio() *Radio {
-	return &Radio{}
+// NewCheckbox 创建多选
+func NewCheckbox() *Checkbox {
+	return &Checkbox{}
 }
 
 // SetOptions 设置选项
-func (a *Radio) SetOptions(options []RadioOptions) *Radio {
+func (a *Checkbox) SetOptions(options []CheckboxOptions) *Checkbox {
 	a.options = options
 	return a
 }
 
 // SetCard 设置盒模式
-func (a *Radio) SetCard(status bool) *Radio {
+func (a *Checkbox) SetCard(status bool) *Checkbox {
 	a.card = status
 	return a
 }
 
 // GetValue 格式化值
-func (a *Radio) GetValue(value any, info map[string]any) any {
+func (a *Checkbox) GetValue(value any, info map[string]any) any {
 	if value == nil {
 		value = a.options[0].Key
 	}
@@ -42,22 +42,22 @@ func (a *Radio) GetValue(value any, info map[string]any) any {
 }
 
 // SaveValue 保存数据
-func (a *Radio) SaveValue(value any, data map[string]any) any {
+func (a *Checkbox) SaveValue(value any, data map[string]any) any {
 	return value
 }
 
 // Render 渲染
-func (a *Radio) Render(element node.IField) *node.TNode {
+func (a *Checkbox) Render(element node.IField) *node.TNode {
 	var options []map[string]any
 	for _, item := range a.options {
 		if a.card {
 			options = append(options, map[string]any{
-				"nodeName": "a-radio",
+				"nodeName": "a-checkbox	",
 				"child": map[string]any{
-					"vSlot:radio": "{checked}",
-					"nodeName":    "a-space",
-					"align":       "start",
-					"vBind:class": "checked ? 'custom-radio-card custom-radio-card-checked' : 'custom-radio-card'",
+					"vSlot:checkbox": "{checked}",
+					"nodeName":       "a-space",
+					"align":          "start",
+					"vBind:class":    "checked ? 'custom-radio-card custom-radio-card-checked' : 'custom-radio-card'",
 					"child": []map[string]any{
 						{
 							"nodeName": "div",
@@ -80,7 +80,7 @@ func (a *Radio) Render(element node.IField) *node.TNode {
 			})
 		} else {
 			options = append(options, map[string]any{
-				"nodeName": "a-radio",
+				"nodeName": "a-checkbox",
 				"child":    item.Name,
 				"value":    item.Key,
 			})
@@ -88,7 +88,7 @@ func (a *Radio) Render(element node.IField) *node.TNode {
 
 	}
 	ui := node.TNode{
-		"nodeName":          "a-radio-group",
+		"nodeName":          "a-checkbox-group",
 		"child":             options,
 		"vModel:modelValue": element.GetUIField(),
 		"placeholder":       "请输入" + element.GetName(),
