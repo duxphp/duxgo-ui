@@ -375,10 +375,19 @@ func (t *Table) Data(ctx echo.Context) map[string]any {
 		if t.tree {
 			model.Order("sort asc")
 		}
-
-		err := model.Limit(pageQuery.Limit).Offset(offset).Find(&data).Error
+		modelData := t.model
+		err := model.Limit(pageQuery.Limit).Offset(offset).Find(modelData).Error
 		if err != nil {
 			panic(err)
+		}
+
+		marshal, err := json.Marshal(modelData)
+		if err != nil {
+			return nil
+		}
+		err = json.Unmarshal(marshal, &data)
+		if err != nil {
+			return nil
 		}
 
 		if t.tree && len(data) > 0 {
