@@ -424,9 +424,6 @@ func (t *Table) Data(ctx echo.Context) map[string]any {
 
 // filterData 过滤返回数据
 func (t *Table) filterData(listData []map[string]any, fields []string, formats map[string]func(any, map[string]any) any) []map[string]any {
-
-	core.Logger.Debug().Interface("list", listData).Send()
-
 	// 过滤列表字段
 	data := []map[string]any{}
 	for _, items := range listData {
