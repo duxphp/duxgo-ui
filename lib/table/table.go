@@ -117,6 +117,12 @@ func (t *Table) PreloadModel(query string, args ...any) *Table {
 	return t
 }
 
+// JoinModel 预载模型
+func (t *Table) JoinModel(query string, args ...any) *Table {
+	t.modelDB = t.modelDB.Joins(query, args)
+	return t
+}
+
 // GetModel 获取模型
 func (t *Table) GetModel() *gorm.DB {
 	return t.modelDB
