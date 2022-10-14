@@ -39,6 +39,8 @@ func (a *Date) GetValue(value any, info map[string]any) any {
 		return lo.Ternary[string](val.IsZero(), "", val.Format("2006"))
 	case "month":
 		return lo.Ternary[string](val.IsZero(), "", val.Format("2006-01"))
+	case "time":
+		return lo.Ternary[string](val.IsZero(), "", val.Format("2006-01-02 15:04:05"))
 	default:
 		return lo.Ternary[string](val.IsZero(), "", val.Format("2006-01-02"))
 	}
