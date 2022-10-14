@@ -1,10 +1,12 @@
 package form
 
 import (
+	"fmt"
 	"github.com/duxphp/duxgo-ui/lib/node"
 	"github.com/samber/lo"
 	"github.com/spf13/cast"
 	"gorm.io/datatypes"
+	"time"
 )
 
 type DateType string
@@ -49,10 +51,16 @@ func (a *Date) GetValue(value any, info map[string]any) any {
 // SaveValue 保存数据
 func (a *Date) SaveValue(value any, data map[string]any) any {
 	val := cast.ToString(value)
+	fmt.Println(val)
 	if val == "" {
 		return nil
 	} else {
-		return datatypes.Date(cast.ToTime(val))
+		switch a.mode {
+		case "time":
+			return cast.ToTimeInDefaultLocation(val, time.Local)
+		default:
+			return datatypes.Date(cast.ToTimeInDefaultLocation(val, time.Local))
+		}
 	}
 }
 
