@@ -3,8 +3,8 @@ package table
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/duxphp/duxgo/core"
 	"github.com/duxphp/duxgo-ui/lib/node"
+	"github.com/duxphp/duxgo/core"
 	function2 "github.com/duxphp/duxgo/util/function"
 	"github.com/gookit/goutil/maputil"
 	"github.com/jianfengye/collection"
@@ -415,6 +415,8 @@ func (t *Table) Data(ctx echo.Context) map[string]any {
 
 // filterData 过滤返回数据
 func (t *Table) filterData(listData []map[string]any, fields []string, formats map[string]func(any, map[string]any) any) []map[string]any {
+
+	core.Logger.Debug().Interface("list", listData).Send()
 
 	// 过滤列表字段
 	data := []map[string]any{}
