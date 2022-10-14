@@ -113,7 +113,7 @@ func (t *Table) ModelOrder(order string) *Table {
 
 // PreloadModel 预载模型
 func (t *Table) PreloadModel(query string, args ...any) *Table {
-	t.modelDB.Preload(query, args)
+	t.modelDB = t.modelDB.Preload(query, args)
 	return t
 }
 
