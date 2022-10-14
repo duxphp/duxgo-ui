@@ -7,7 +7,7 @@ require (
 	github.com/go-playground/validator/v10 v10.11.0
 	github.com/gookit/goutil v0.5.7
 	github.com/jianfengye/collection v1.4.1
-	github.com/labstack/echo/v4 v4.7.2
+	github.com/labstack/echo/v4 v4.9.0
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/samber/lo v1.27.0
 	github.com/spf13/cast v1.5.0
