@@ -10,8 +10,9 @@ import (
 type DateType string
 
 const (
-	DateYear  DateType = "year"
 	DateMonth DateType = "month"
+	DateYear  DateType = "year"
+	DateTime  DateType = "time"
 )
 
 // Date 日期输入框
@@ -61,8 +62,15 @@ func (a *Date) Render(element node.IField) *node.TNode {
 		"vModel:modelValue": element.GetUIField(),
 		"placeholder":       "请输入" + element.GetName(),
 	}
-	if a.mode != "" {
-		ui["nodeName"] = "a-" + a.mode + "-picker"
+
+	switch a.mode {
+	case "year":
+		ui["nodeName"] = "a-year-picker"
+	case "month":
+		ui["nodeName"] = "a-month-picker"
+	case "time":
+		ui["showTime"] = true
+		ui["format"] = "YYYY-MM-DD HH:mm:ss"
 	}
 	return &ui
 }
