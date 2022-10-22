@@ -35,9 +35,6 @@ func (a *Checkbox) SetCard(status bool) *Checkbox {
 
 // GetValue 格式化值
 func (a *Checkbox) GetValue(value any, info map[string]any) any {
-	if value == nil {
-		value = a.options[0].Key
-	}
 	return value
 }
 
