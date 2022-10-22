@@ -179,7 +179,7 @@ func (t *Form) RenderElement() []*node.TNode {
 		if item.Switch != nil {
 			condition := make([]string, 0)
 			for _, s := range item.Switch {
-				condition = append(condition, fmt.Sprintf("(Array.isArray(data.%s) ? data.includes('%s') : data.%s == '%s')", s.Field, s.Value, s.Field, s.Value))
+				condition = append(condition, fmt.Sprintf("(Array.isArray(data.%s) ? data.%s.includes('%s') : data.%s == '%s')", s.Field, s.Field, s.Value, s.Field, s.Value))
 			}
 			el["vIf"] = strings.Join(condition, " || ")
 		}
