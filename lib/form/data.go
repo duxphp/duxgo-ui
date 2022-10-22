@@ -30,11 +30,12 @@ func (a *Data) AddText(name string, field string, width string) *Data {
 	return a
 }
 
-func (a *Data) AddSelect(name string, field string, data map[any]string, width string) *Data {
+func (a *Data) AddSelect(name string, field string, data map[any]string, multi bool, width string) *Data {
 	a.column = append(a.column, map[string]any{
 		"name":  name,
 		"key":   field,
 		"type":  "select",
+		"multi": multi,
 		"data":  data,
 		"width": width,
 	})
@@ -175,6 +176,7 @@ func (a *Data) Render(element node.IField) *node.TNode {
 					"nParams": map[string]any{
 						"placeholder": "请输入" + column["name"].(string),
 						"options":     options,
+						"multiple":    column["multi"].(bool),
 					},
 					"vModel:modelValue": field,
 				},
