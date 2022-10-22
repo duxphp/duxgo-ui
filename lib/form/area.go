@@ -12,7 +12,7 @@ type AreaMap struct {
 	Street   string
 }
 
-// Area 日期输入框
+// Area 地区输入框
 type Area struct {
 	maps *AreaMap
 }
