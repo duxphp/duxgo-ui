@@ -25,21 +25,22 @@ type ILayout interface {
 
 // Element 字段结构
 type Element struct {
-	Name     string
-	Field    string
-	HasAs    string
-	HasModel any
-	HasKey   string
-	Default  any
-	Help     any
-	HelpLine bool
-	Must     bool
-	Verify   []map[string]string
-	Format   func(value any) any
-	Switch   []*ElementSwitch
-	Value    *any
-	UI       IElement
-	Layout   ILayout
+	Name      string
+	Field     string
+	HasAs     string
+	HasModel  any
+	HasKey    string
+	Default   any
+	Help      any
+	HelpLine  bool
+	Must      bool
+	Verify    []map[string]string
+	Format    func(value any) any
+	Switch    []*ElementSwitch
+	SwitchAnd bool
+	Value     *any
+	UI        IElement
+	Layout    ILayout
 }
 
 // ElementSwitch 元素切换
@@ -126,6 +127,12 @@ func (a *Element) SetSwitch(field string, value any) *Element {
 		Field: field,
 		Value: value,
 	})
+	return a
+}
+
+// SetSwitchAnd 设置切换条件
+func (a *Element) SetSwitchAnd() *Element {
+	a.SwitchAnd = true
 	return a
 }
 

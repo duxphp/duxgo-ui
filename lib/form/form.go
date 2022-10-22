@@ -181,7 +181,7 @@ func (t *Form) RenderElement() []*node.TNode {
 			for _, s := range item.Switch {
 				condition = append(condition, fmt.Sprintf("(Array.isArray(data.%s) ? data.%s.includes('%s') : data.%s == '%s')", s.Field, s.Field, s.Value, s.Field, s.Value))
 			}
-			el["vIf"] = strings.Join(condition, " || ")
+			el["vIf"] = strings.Join(condition, lo.Ternary[string](item.SwitchAnd, " && ", " || "))
 		}
 		element = append(element, &el)
 	}
