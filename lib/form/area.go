@@ -91,6 +91,7 @@ func (a *Area) Render(element node.IField) *node.TNode {
 		"nParams": map[string]any{
 			"allow-search": true,
 			"path-mode":    true,
+			"clearable":    true,
 			"placeholder":  "请输入" + element.GetName(),
 		},
 		"dataUrl":      "/tools/area?level=3",
