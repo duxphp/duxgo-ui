@@ -15,6 +15,7 @@ type AreaMap struct {
 // Area 地区输入框
 type Area struct {
 	maps *AreaMap
+	url  string
 }
 
 // NewArea 创建日期
@@ -29,7 +30,14 @@ func NewArea(maps *AreaMap) *Area {
 	}
 	return &Area{
 		maps: maps,
+		url:  "/tools/area?level=3",
 	}
+}
+
+// SetUrl 设置Url
+func (a *Area) SetUrl(url string) *Area {
+	a.url = url
+	return a
 }
 
 // GetValue 格式化值
@@ -94,7 +102,7 @@ func (a *Area) Render(element node.IField) *node.TNode {
 			"clearable":    true,
 			"placeholder":  "请输入" + element.GetName(),
 		},
-		"dataUrl":      "/tools/area?level=3",
+		"dataUrl":      a.url,
 		"vModel:value": element.GetUIField(),
 	}
 	return &ui
