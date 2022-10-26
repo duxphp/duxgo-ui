@@ -80,6 +80,7 @@ func (a *Data) Render(element node.IField) *node.TNode {
 	inner := []map[string]any{}
 	data := map[string]any{}
 	for _, field := range a.uiField {
+		data[field.Key] = nil
 		inner = append(inner, map[string]any{
 			"nodeName": "div",
 			"class":    "flex-1",
