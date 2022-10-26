@@ -51,8 +51,8 @@ func (a *Select) SetOptions(options map[any]any) *Select {
 }
 
 // SetOptionsT 设置选项按类型
-func (a *Select) SetOptionsT(options SelectOptions) *Select {
-	a.options = append(a.options, options)
+func (a *Select) SetOptionsT(options []SelectOptions) *Select {
+	a.options = append(a.options, options...)
 	return a
 }
 
