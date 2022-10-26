@@ -83,7 +83,7 @@ func (a *Data) Render(element node.IField) *node.TNode {
 		inner = append(inner, map[string]any{
 			"nodeName": "div",
 			"class":    "flex-1",
-			"child":    field.UI.Render(&dataElement{field: fmt.Sprintf("value['%s']", field.Key), name: field.Name}),
+			"child":    field.UI.Render(&dataElement{field: field.Key, name: field.Name}),
 		})
 	}
 	marshal, err := json.Marshal(data)
