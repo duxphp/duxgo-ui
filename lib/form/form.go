@@ -209,6 +209,9 @@ func (t *Form) Render(ctx echo.Context) *node.TNode {
 
 	data := map[string]any{}
 	for _, item := range elements {
+		if item.Field == "" {
+			continue
+		}
 		data[item.Field] = item.GetData(t.info)
 	}
 	// 渲染表单元素
@@ -292,9 +295,6 @@ func (t *Form) Save(ctx echo.Context) error {
 
 	// 格式化字符表单元素
 	for _, item := range elements {
-		if item.Field == "" {
-			continue
-		}
 		value := data[item.Field]
 		// 通过数据格式化
 		if item.Format != nil {
