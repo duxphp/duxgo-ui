@@ -68,7 +68,7 @@ type dataElement struct {
 }
 
 func (a *dataElement) GetUIField(field ...string) string {
-	return fmt.Sprintf("value['%s']", a.field)
+	return fmt.Sprintf("value.%s", a.field)
 }
 
 func (a *dataElement) GetName() string {
