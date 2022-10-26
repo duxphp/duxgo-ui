@@ -11,6 +11,7 @@ type Select struct {
 	options     map[any]any
 	placeholder string
 	multi       bool
+	maxCount    int
 	url         string
 	urlParams   map[string]any
 	image       string
@@ -90,10 +91,11 @@ func (a *Select) Render(element node.IField) *node.TNode {
 	}
 
 	nParams := node.TNode{
-		"placeholder": placeholder,
-		"options":     options,
-		"allowClear":  true,
-		"multiple":    a.multi,
+		"placeholder":   placeholder,
+		"options":       options,
+		"allowClear":    true,
+		"multiple":      a.multi,
+		"max-tag-count": a.maxCount,
 	}
 
 	ui := node.TNode{
