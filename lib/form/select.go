@@ -8,7 +8,7 @@ import (
 
 // Select 文本输入框
 type Select struct {
-	options     map[any]any
+	options     []SelectOptions
 	placeholder string
 	multi       bool
 	maxCount    uint
@@ -17,6 +17,11 @@ type Select struct {
 	image       string
 	desc        string
 	icon        string
+}
+
+type SelectOptions struct {
+	Key  any
+	Name any
 }
 
 // NewSelect 创建文本
@@ -36,7 +41,18 @@ func (a *Select) SetMulti(num ...uint) *Select {
 
 // SetOptions 设置选项
 func (a *Select) SetOptions(options map[any]any) *Select {
-	a.options = options
+	for k, v := range options {
+		a.options = append(a.options, SelectOptions{
+			Key:  k,
+			Name: v,
+		})
+	}
+	return a
+}
+
+// SetOptionsT 设置选项按类型
+func (a *Select) SetOptionsT(options SelectOptions) *Select {
+	a.options = append(a.options, options)
 	return a
 }
 
@@ -86,10 +102,10 @@ func (a *Select) Render(element node.IField) *node.TNode {
 
 	options := []map[string]any{}
 
-	for value, label := range a.options {
+	for _, label := range a.options {
 		options = append(options, map[string]any{
-			"label": label,
-			"value": value,
+			"label": label.Name,
+			"value": label.Key,
 		})
 	}
 
