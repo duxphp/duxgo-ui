@@ -8,7 +8,7 @@ import (
 
 // Data 动态数据编辑器
 type Data struct {
-	uiField []DataField
+	uiField []*DataField
 	option  bool
 	max     uint
 	min     uint
@@ -26,7 +26,7 @@ func NewData() *Data {
 	return &Data{}
 }
 
-func (a *Data) AddField(ui ...DataField) *Data {
+func (a *Data) AddField(ui ...*DataField) *Data {
 	a.uiField = ui
 	return a
 }
