@@ -53,7 +53,11 @@ func (a *Data) SetWrap(status bool) *Data {
 
 // GetValue 格式化值
 func (a *Data) GetValue(value any, info map[string]any) any {
-	return value
+	if value == nil {
+		return []any{}
+	} else {
+		return value
+	}
 }
 
 // SaveValue 保存数据
