@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/duxphp/duxgo-ui/lib/node"
-	"github.com/spf13/cast"
 )
 
 // Data 动态数据编辑器
@@ -83,7 +82,7 @@ func (a *Data) Render(element node.IField) *node.TNode {
 	for _, field := range a.uiField {
 		inner = append(inner, map[string]any{
 			"nodeName": "div",
-			"class":    "flex-grow",
+			"class":    "flex-1",
 			"child":    field.UI.Render(&dataElement{field: fmt.Sprintf("value['%s']", field.Key), name: field.Name}),
 		})
 	}
@@ -99,7 +98,7 @@ func (a *Data) Render(element node.IField) *node.TNode {
 		"placeholder":     "请输入" + element.GetName(),
 		"renderRow: value, index": map[string]any{
 			"nodeName": "div",
-			"class":    "flex flex-grow gap-4 items-center grid-cols-" + cast.ToString(len(a.uiField)),
+			"class":    "flex flex-grow gap-4 items-center ",
 			"child":    inner,
 		},
 	}
