@@ -62,7 +62,12 @@ func (a *Data) GetValue(value any, info map[string]any) any {
 
 // SaveValue 保存数据
 func (a *Data) SaveValue(value any, data map[string]any) any {
-	return value
+	marshal, _ := json.Marshal(value)
+	if value == nil {
+		return []any{}
+	} else {
+		return marshal
+	}
 }
 
 // 数据元素
