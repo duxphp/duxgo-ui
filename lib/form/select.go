@@ -11,7 +11,7 @@ type Select struct {
 	options     map[any]any
 	placeholder string
 	multi       bool
-	maxCount    int
+	maxCount    uint
 	url         string
 	urlParams   map[string]any
 	image       string
@@ -26,8 +26,11 @@ func NewSelect() *Select {
 }
 
 // SetMulti 设置多选
-func (a *Select) SetMulti() *Select {
+func (a *Select) SetMulti(num ...uint) *Select {
 	a.multi = true
+	if len(num) > 0 {
+		a.maxCount = num[0]
+	}
 	return a
 }
 
