@@ -33,7 +33,7 @@ type Form struct {
 	validate   *validator.Validate                                       //验证规则
 	saveFn     func(data map[string]any, key uint) error                 // 保存函数
 	saveBefore func(data map[string]any, update bool, db *gorm.DB) error // 保存函数
-	saveAfter  func(model any, update bool) error                        // 保存函数
+	saveAfter  func(model any, update bool, db *gorm.DB) error           // 保存函数
 
 }
 
@@ -253,7 +253,7 @@ func (t *Form) SaveBefore(callback func(data map[string]any, update bool, db *go
 }
 
 // SaveAfter 保存后处理
-func (t *Form) SaveAfter(callback func(data any, update bool) error) {
+func (t *Form) SaveAfter(callback func(data any, update bool, db *gorm.DB) error) {
 	t.saveAfter = callback
 }
 
@@ -448,7 +448,7 @@ func (t *Form) Save(ctx echo.Context) error {
 	}
 
 	if t.saveAfter != nil {
-		err = t.saveAfter(t.model, updateStatus)
+		err = t.saveAfter(t.model, updateStatus, transaction)
 		if err != nil {
 			return err
 		}
