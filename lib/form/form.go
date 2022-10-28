@@ -253,7 +253,7 @@ func (t *Form) SaveBefore(callback func(data map[string]any, update bool, db *go
 }
 
 // SaveAfter 保存后处理
-func (t *Form) SaveAfter(callback func(data any, update bool, db *gorm.DB) error) {
+func (t *Form) SaveAfter(callback func(model any, update bool, db *gorm.DB) error) {
 	t.saveAfter = callback
 }
 
