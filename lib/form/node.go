@@ -158,7 +158,7 @@ func (t *Node) renderDialog() *node.TNode {
 				"child": []node.TNode{
 					{
 						"nodeName": "div",
-						"class":    "flex-grow p-5 pb-0",
+						"class":    "flex-grow w-10 p-5 pb-0",
 						"child":    t.Element,
 					},
 				},
