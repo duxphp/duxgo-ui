@@ -144,7 +144,7 @@ func (t *Node) renderPage() *[]node.TNode {
 	}
 }
 
-// renderPage 渲染弹窗表单
+// renderDialog 渲染弹窗表单
 func (t *Node) renderDialog() *node.TNode {
 	return &node.TNode{
 		"nodeName": "app-dialog",
@@ -152,16 +152,9 @@ func (t *Node) renderDialog() *node.TNode {
 		"class":    "flex-grow",
 		"child": []node.TNode{
 			{
-				"nodeName":      "div",
-				"vSlot:default": "",
-				"class":         "flex",
-				"child": []node.TNode{
-					{
-						"nodeName": "div",
-						"class":    "flex-grow p-5 pb-0",
-						"child":    t.Element,
-					},
-				},
+				"nodeName": "div",
+				"class":    "flex-grow p-5 pb-0",
+				"child":    t.Element,
 			},
 			{
 				"nodeName":     "div",
