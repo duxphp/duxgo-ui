@@ -303,8 +303,8 @@ func (t *Form) Save(ctx echo.Context) error {
 		// 通过元素格式化保存
 		value = item.SaveData(value, data)
 		data[item.Field] = value
+		postData[item.Field] = value
 	}
-	formatData := data
 
 	// 自定义保存
 	if t.saveFn != nil {
@@ -449,7 +449,7 @@ func (t *Form) Save(ctx echo.Context) error {
 	}
 
 	if t.saveAfter != nil {
-		err = t.saveAfter(formatData, t.model, updateStatus, transaction)
+		err = t.saveAfter(postData, t.model, updateStatus, transaction)
 		if err != nil {
 			return err
 		}
