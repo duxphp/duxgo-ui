@@ -174,6 +174,9 @@ func (t *Form) RenderElement() []*node.TNode {
 			// 布局UI
 			el = *item.Layout.Render()
 		}
+		if el == nil {
+			continue
+		}
 
 		// 切换类型
 		if item.Switch != nil {
