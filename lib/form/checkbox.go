@@ -1,7 +1,10 @@
 package form
 
 import (
+	"encoding/json"
 	"github.com/duxphp/duxgo-ui/lib/node"
+	"github.com/spf13/cast"
+	"strings"
 )
 
 type CheckboxOptions struct {
@@ -14,6 +17,7 @@ type CheckboxOptions struct {
 type Checkbox struct {
 	options []CheckboxOptions
 	card    bool
+	array   bool
 }
 
 // NewCheckbox 创建多选
@@ -33,14 +37,33 @@ func (a *Checkbox) SetCard(status bool) *Checkbox {
 	return a
 }
 
+// SetArray 设置返回格式
+func (a *Checkbox) SetArray() *Checkbox {
+	a.array = true
+	return a
+}
+
 // GetValue 格式化值
 func (a *Checkbox) GetValue(value any, info map[string]any) any {
-	return value
+	if a.array {
+		return value
+	} else {
+		return strings.Split(cast.ToString(value), ",")
+	}
 }
 
 // SaveValue 保存数据
 func (a *Checkbox) SaveValue(value any, data map[string]any) any {
-	return value
+	if a.array {
+		marshal, _ := json.Marshal(value)
+		return marshal
+	} else {
+		values := []string{}
+		for _, v := range cast.ToSlice(value) {
+			values = append(values, cast.ToString(v))
+		}
+		return strings.Join(values, ",")
+	}
 }
 
 // Render 渲染
