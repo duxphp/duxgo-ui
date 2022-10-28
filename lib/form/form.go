@@ -19,21 +19,21 @@ import (
 
 type Form struct {
 	model      any
-	info       map[string]any                                                      // 表单数据
-	dialog     bool                                                                // 弹出类型
-	url        string                                                              // 提交URL
-	method     string                                                              //提交方式
-	title      string                                                              // 表单标题
-	back       bool                                                                // 返回功能
-	header     []node.IWidget                                                      //头部部件
-	element    []*Element                                                          // 表单元素集
-	modelDB    *gorm.DB                                                            // 模型结构体
-	primary    string                                                              // 主键名
-	key        uint                                                                // 主键id
-	validate   *validator.Validate                                                 //验证规则
-	saveFn     func(data map[string]any, key uint) error                           // 保存函数
-	saveBefore func(data map[string]any, update bool, db *gorm.DB) error           // 保存函数
-	saveAfter  func(data map[string]any, info any, update bool, db *gorm.DB) error // 保存函数
+	info       map[string]any                                                                     // 表单数据
+	dialog     bool                                                                               // 弹出类型
+	url        string                                                                             // 提交URL
+	method     string                                                                             //提交方式
+	title      string                                                                             // 表单标题
+	back       bool                                                                               // 返回功能
+	header     []node.IWidget                                                                     //头部部件
+	element    []*Element                                                                         // 表单元素集
+	modelDB    *gorm.DB                                                                           // 模型结构体
+	primary    string                                                                             // 主键名
+	key        uint                                                                               // 主键id
+	validate   *validator.Validate                                                                //验证规则
+	saveFn     func(data map[string]any, key uint) error                                          // 保存函数
+	saveBefore func(data map[string]any, postData map[string]any, update bool, db *gorm.DB) error // 保存函数
+	saveAfter  func(data map[string]any, info any, update bool, db *gorm.DB) error                // 保存函数
 
 }
 
@@ -248,7 +248,7 @@ func (t *Form) SaveFn(callback func(data map[string]any, key uint) error) {
 }
 
 // SaveBefore 保存前处理
-func (t *Form) SaveBefore(callback func(data map[string]any, update bool, db *gorm.DB) error) {
+func (t *Form) SaveBefore(callback func(data map[string]any, postData map[string]any, update bool, db *gorm.DB) error) {
 	t.saveBefore = callback
 }
 
@@ -340,7 +340,7 @@ func (t *Form) Save(ctx echo.Context) error {
 
 	// 保存前数据
 	if t.saveBefore != nil {
-		err = t.saveBefore(data, updateStatus, transaction)
+		err = t.saveBefore(data, postData, updateStatus, transaction)
 		if err != nil {
 			return err
 		}
