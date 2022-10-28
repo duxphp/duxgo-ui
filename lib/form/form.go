@@ -368,14 +368,14 @@ func (t *Form) Save(ctx echo.Context) error {
 	if t.key > 0 {
 		err = mode.Where(t.primary+" = ?", t.key).Updates(data).Error
 	} else {
-		err = mode.Create(data).Error
+		err = mode.Debug().Create(data).Error
 	}
 	if err != nil {
 		return exception.Error(err)
 	}
 	if t.key == 0 {
 		lastData := map[string]any{}
-		err = transaction.Model(t.model).Select(t.primary).Last(&lastData).Error
+		err = transaction.Model(t.model).Debug().Select(t.primary).Last(&lastData).Error
 		if err != nil {
 			return exception.Error(err)
 		}
@@ -383,7 +383,7 @@ func (t *Form) Save(ctx echo.Context) error {
 	}
 
 	// 查询数据
-	err = transaction.Model(t.model).Find(t.model, t.key).Error
+	err = transaction.Model(t.model).Debug().Find(t.model, t.key).Error
 	if err != nil {
 		return exception.Error(err)
 	}
