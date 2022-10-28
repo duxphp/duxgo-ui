@@ -342,6 +342,7 @@ func (t *Form) Save(ctx echo.Context) error {
 	if t.saveBefore != nil {
 		err = t.saveBefore(data, postData, updateStatus, transaction)
 		if err != nil {
+			transaction.Rollback()
 			return err
 		}
 	}
@@ -371,12 +372,14 @@ func (t *Form) Save(ctx echo.Context) error {
 		err = mode.Debug().Create(data).Error
 	}
 	if err != nil {
+		transaction.Rollback()
 		return exception.Error(err)
 	}
 	if t.key == 0 {
 		lastData := map[string]any{}
 		err = transaction.Model(t.model).Debug().Select(t.primary).Last(&lastData).Error
 		if err != nil {
+			transaction.Rollback()
 			return exception.Error(err)
 		}
 		t.key = cast.ToUint(lastData[t.primary])
@@ -385,6 +388,7 @@ func (t *Form) Save(ctx echo.Context) error {
 	// 查询数据
 	err = transaction.Model(t.model).Debug().Find(t.model, t.key).Error
 	if err != nil {
+		transaction.Rollback()
 		return exception.Error(err)
 	}
 	marshal, _ := json.Marshal(t.model)
@@ -403,12 +407,14 @@ func (t *Form) Save(ctx echo.Context) error {
 		}
 		res.Debug().Scan(&listData)
 		if res.Error != nil {
+			transaction.Rollback()
 			return err
 		}
 		// 更新顺序
 		latest := cast.ToUint(listData["latest"]) + 1
 		err = transaction.Model(&orgModel).Where(t.primary+" = ?", t.key).Update("sort", latest).Error
 		if err != nil {
+			transaction.Rollback()
 			return err
 		}
 	}
@@ -439,11 +445,13 @@ func (t *Form) Save(ctx echo.Context) error {
 		}
 		err = mapstructure.Decode(hasData, item.HasModel)
 		if err != nil {
+			transaction.Rollback()
 			return err
 		}
 		// 替换当前关联
 		err = model.Replace(item.HasModel)
 		if err != nil {
+			transaction.Rollback()
 			return err
 		}
 	}
@@ -451,6 +459,7 @@ func (t *Form) Save(ctx echo.Context) error {
 	if t.saveAfter != nil {
 		err = t.saveAfter(postData, t.model, updateStatus, transaction)
 		if err != nil {
+			transaction.Rollback()
 			return err
 		}
 	}
