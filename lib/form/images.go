@@ -1,6 +1,7 @@
 package form
 
 import (
+	"encoding/json"
 	"github.com/duxphp/duxgo-ui/lib/node"
 )
 
@@ -41,7 +42,8 @@ func (a *Images) GetValue(value any, info map[string]any) any {
 
 // SaveValue 保存数据
 func (a *Images) SaveValue(value any, data map[string]any) any {
-	return value
+	marshal, _ := json.Marshal(value)
+	return marshal
 }
 
 // Render 渲染
