@@ -321,6 +321,8 @@ func (t *Form) Save(ctx echo.Context) error {
 	for _, col := range result {
 		fields = append(fields, col.Name())
 	}
+	postData = data
+
 	for k, _ := range data {
 		_, _, ok := lo.FindIndexOf[string](fields, func(i string) bool {
 			return i == k
@@ -447,7 +449,7 @@ func (t *Form) Save(ctx echo.Context) error {
 	}
 
 	if t.saveAfter != nil {
-		err = t.saveAfter(data, t.model, updateStatus, transaction)
+		err = t.saveAfter(postData, t.model, updateStatus, transaction)
 		if err != nil {
 			return err
 		}
