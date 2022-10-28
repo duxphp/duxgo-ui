@@ -108,11 +108,20 @@ func (a *Tab) Render() *node.TNode {
 
 	}
 
-	ui := node.TNode{
-		"nodeName": "a-tabs",
-		"class":    "mb-4 bg-white dark:bg-blackgray-4 rounded shadow p-4 pb-1",
-		"type":     "rounded",
-		"child":    children,
+	ui := node.TNode{}
+	if a.dialog {
+		ui = node.TNode{
+			"nodeName": "a-tabs",
+			"type":     "rounded",
+			"child":    children,
+		}
+	} else {
+		ui = node.TNode{
+			"nodeName": "a-tabs",
+			"class":    "mb-4 bg-white dark:bg-blackgray-4 rounded shadow p-4 pb-1",
+			"type":     "rounded",
+			"child":    children,
+		}
 	}
 	return &ui
 }
