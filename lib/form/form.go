@@ -439,6 +439,8 @@ func (t *Form) Save(ctx echo.Context) error {
 			hasIds = []any{postData[item.Field]}
 		}
 
+		fmt.Println("关联ID", hasIds)
+
 		// 构建结构体
 		var hasData []map[string]any
 		for _, id := range hasIds {
@@ -446,6 +448,7 @@ func (t *Form) Save(ctx echo.Context) error {
 				item.HasKey: cast.ToInt(id),
 			})
 		}
+		fmt.Println("关联数据", hasData)
 		err = mapstructure.Decode(hasData, item.HasModel)
 		if err != nil {
 			transaction.Rollback()

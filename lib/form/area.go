@@ -98,9 +98,9 @@ func (a *Area) Render(element node.IField) *node.TNode {
 		"nodeName": "app-cascader",
 		"nParams": map[string]any{
 			"allow-search": true,
-			"path-mode":    true,
-			"clearable":    true,
-			"placeholder":  "请输入" + element.GetName(),
+			// "path-mode":    true,
+			"allow-clear": true,
+			"placeholder": "请输入" + element.GetName(),
 		},
 		"dataUrl":      a.url,
 		"vModel:value": element.GetUIField(),
