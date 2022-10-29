@@ -17,6 +17,7 @@ type Link struct {
 	buttonLong   bool
 	prefix       string
 	fields       []string
+	jsIf         string
 }
 
 // NewLink 新建链接
@@ -45,6 +46,12 @@ func (a *Link) SetType(name string, config ...node.TNode) *Link {
 // SetIcon 设置图标
 func (a *Link) SetIcon(icon string) *Link {
 	a.icon = icon
+	return a
+}
+
+// SetIf 设置条件
+func (a *Link) SetIf(js string) *Link {
+	a.jsIf = js
 	return a
 }
 
@@ -81,6 +88,11 @@ func (a *Link) Render() node.TNode {
 
 	nodeData := node.TNode{
 		"nodeName": "route",
+	}
+
+	// 设置判断脚本
+	if a.jsIf != "" {
+		nodeData["vIf"] = a.jsIf
 	}
 
 	//链接类型
