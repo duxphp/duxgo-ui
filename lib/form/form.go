@@ -278,6 +278,7 @@ func (t *Form) Save(ctx echo.Context) error {
 	// 过滤提交字段
 	data := map[string]any{}
 
+	// 验证字段数据
 	for _, item := range elements {
 		if item.HasAs != "" {
 			continue
@@ -293,12 +294,11 @@ func (t *Form) Save(ctx echo.Context) error {
 				}
 			}
 		}
-		data[item.Field] = postData[item.Field]
 	}
 
-	// 格式化字符表单元素
+	// 格式化字段数据
 	for _, item := range elements {
-		value := data[item.Field]
+		value := postData[item.Field]
 		// 通过数据格式化
 		if item.Format != nil {
 			value = item.Format(value)
