@@ -206,8 +206,7 @@ func (t *Table) Render(ctx echo.Context) *node.TNode {
 		value = ctx.QueryParam(item.Field)
 		if value == "" {
 			value = item.Default
-		}
-		if item.Format != nil {
+		} else if item.Format != nil {
 			value = item.Format(value)
 		}
 		DataFilter[item.Field] = value
