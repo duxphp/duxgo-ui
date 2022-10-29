@@ -206,7 +206,7 @@ func (t *Form) Render(ctx echo.Context) *node.TNode {
 		t.modelDB.First(queryModel, t.key)
 		jsonData, _ := json.Marshal(queryModel)
 		_ = json.Unmarshal(jsonData, &t.info)
-		fmt.Println("infoData", t.info)
+		core.Logger.Debug().Interface("infoData", t.info).Interface("queryModel", queryModel).Msg("render")
 	}
 	// 获取默认数据
 	elements := t.ExpandElement()
