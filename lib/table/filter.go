@@ -20,6 +20,7 @@ type Filter struct {
 	Quick   bool
 	Default any
 	UI      IFilter
+	Format  func(value any) any
 }
 
 // SetQuick 设置快速筛选
@@ -43,6 +44,12 @@ func (a *Filter) SetCollect(where func(*collection.ICollection)) *Filter {
 // SetDefault 设置默认值
 func (a *Filter) SetDefault(value any) *Filter {
 	a.Default = value
+	return a
+}
+
+// SetFormat 格式化字段
+func (a *Filter) SetFormat(callback func(value any) any) *Filter {
+	a.Format = callback
 	return a
 }
 
