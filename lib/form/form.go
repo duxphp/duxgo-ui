@@ -201,7 +201,6 @@ func (t *Form) Render(ctx echo.Context) *node.TNode {
 		// 预加载链表
 		for _, item := range elements {
 			if item.HasAs != "" {
-				core.Logger.Debug().Interface("Preload", item.HasAs).Msg("render")
 				t.modelDB.Preload(item.HasAs)
 			}
 		}
@@ -210,7 +209,6 @@ func (t *Form) Render(ctx echo.Context) *node.TNode {
 		t.modelDB.First(queryModel, t.key)
 		jsonData, _ := json.Marshal(queryModel)
 		_ = json.Unmarshal(jsonData, &t.info)
-		core.Logger.Debug().Interface("infoData", t.info).Interface("queryModel", queryModel).Msg("render")
 	}
 
 	data := map[string]any{}
@@ -442,8 +440,6 @@ func (t *Form) Save(ctx echo.Context) error {
 			hasIds = []any{postData[item.Field]}
 		}
 
-		fmt.Println("关联ID", hasIds, postData)
-
 		// 构建结构体
 		var hasData []map[string]any
 		for _, id := range hasIds {
@@ -451,7 +447,6 @@ func (t *Form) Save(ctx echo.Context) error {
 				item.HasKey: cast.ToInt(id),
 			})
 		}
-		fmt.Println("关联数据", hasData)
 		err = mapstructure.Decode(hasData, item.HasModel)
 		if err != nil {
 			transaction.Rollback()
