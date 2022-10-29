@@ -194,12 +194,15 @@ func (t *Form) RenderElement() []*node.TNode {
 // Render 渲染表单
 func (t *Form) Render(ctx echo.Context) *node.TNode {
 
+	// 展开扩展数据
+	elements := t.ExpandElement()
+
 	if t.key > 0 && t.model != nil {
 		// 预加载链表
-		for _, item := range t.element {
+		for _, item := range elements {
 			if item.HasAs != "" {
 				core.Logger.Debug().Interface("Preload", item.HasAs).Msg("render")
-				t.modelDB = t.modelDB.Preload(item.HasAs)
+				t.modelDB.Preload(item.HasAs)
 			}
 		}
 		// 查询当前数据
@@ -209,8 +212,6 @@ func (t *Form) Render(ctx echo.Context) *node.TNode {
 		_ = json.Unmarshal(jsonData, &t.info)
 		core.Logger.Debug().Interface("infoData", t.info).Interface("queryModel", queryModel).Msg("render")
 	}
-	// 获取默认数据
-	elements := t.ExpandElement()
 
 	data := map[string]any{}
 	for _, item := range elements {
