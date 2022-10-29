@@ -198,6 +198,7 @@ func (t *Form) Render(ctx echo.Context) *node.TNode {
 		// 预加载链表
 		for _, item := range t.element {
 			if item.HasAs != "" {
+				core.Logger.Debug().Interface("Preload", item.HasAs).Msg("render")
 				t.modelDB = t.modelDB.Preload(item.HasAs)
 			}
 		}
