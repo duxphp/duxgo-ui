@@ -382,7 +382,7 @@ func (t *Table) Data(ctx echo.Context) map[string]any {
 			model.Order("sort asc")
 		}
 		modelData := t.model
-		err := model.Limit(pageQuery.Limit).Offset(offset).Find(modelData).Error
+		err := model.Debug().Limit(pageQuery.Limit).Offset(offset).Find(modelData).Error
 		if err != nil {
 			panic(err)
 		}
