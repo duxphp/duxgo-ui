@@ -198,7 +198,7 @@ func (t *Form) Render(ctx echo.Context) *node.TNode {
 		// 预加载链表
 		for _, item := range t.element {
 			if item.HasAs != "" {
-				t.modelDB.Preload(item.HasAs)
+				t.modelDB = t.modelDB.Preload(item.HasAs)
 			}
 		}
 		// 查询当前数据
