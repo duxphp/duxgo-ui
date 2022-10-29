@@ -439,7 +439,7 @@ func (t *Form) Save(ctx echo.Context) error {
 			hasIds = []any{postData[item.Field]}
 		}
 
-		fmt.Println("关联ID", hasIds)
+		fmt.Println("关联ID", hasIds, postData)
 
 		// 构建结构体
 		var hasData []map[string]any
