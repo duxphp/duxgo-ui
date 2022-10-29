@@ -260,7 +260,7 @@ func (t *Table) Data(ctx echo.Context) map[string]any {
 		panic("table Model or Data not set")
 	}
 
-	model := t.modelDB
+	model := t.modelDB.Debug()
 	collect := t.collect
 	collectFilter := map[string]any{}
 
@@ -382,7 +382,7 @@ func (t *Table) Data(ctx echo.Context) map[string]any {
 			model.Order("sort asc")
 		}
 		modelData := t.model
-		err := model.Debug().Limit(pageQuery.Limit).Offset(offset).Find(modelData).Error
+		err := model.Limit(pageQuery.Limit).Offset(offset).Find(modelData).Error
 		if err != nil {
 			panic(err)
 		}
