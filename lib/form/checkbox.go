@@ -18,6 +18,7 @@ type Checkbox struct {
 	options []CheckboxOptions
 	card    bool
 	array   bool
+	typeInt bool
 }
 
 // NewCheckbox 创建多选
@@ -43,12 +44,26 @@ func (a *Checkbox) SetArray() *Checkbox {
 	return a
 }
 
+func (a *Checkbox) SetTypeInt() *Checkbox {
+	a.typeInt = true
+	return a
+}
+
 // GetValue 格式化值
 func (a *Checkbox) GetValue(value any, info map[string]any) any {
 	if a.array {
 		return value
 	} else {
-		return strings.Split(cast.ToString(value), ",")
+		data := strings.Split(cast.ToString(value), ",")
+		values := []any{}
+		for _, datum := range data {
+			if a.typeInt {
+				values = append(values, cast.ToInt(datum))
+			} else {
+				values = append(values, datum)
+			}
+		}
+		return values
 	}
 }
 
@@ -58,8 +73,8 @@ func (a *Checkbox) SaveValue(value any, data map[string]any) any {
 		marshal, _ := json.Marshal(value)
 		return marshal
 	} else {
-		values := []string{}
-		for _, v := range cast.ToSlice(value) {
+		values := value.([]string)
+		for _, v := range value.([]any) {
 			values = append(values, cast.ToString(v))
 		}
 		return strings.Join(values, ",")
