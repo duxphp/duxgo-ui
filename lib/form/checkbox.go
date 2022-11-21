@@ -57,6 +57,9 @@ func (a *Checkbox) GetValue(value any, info map[string]any) any {
 		data := strings.Split(cast.ToString(value), ",")
 		values := []any{}
 		for _, datum := range data {
+			if datum == "" {
+				continue
+			}
 			if a.typeInt {
 				values = append(values, cast.ToInt(datum))
 			} else {
