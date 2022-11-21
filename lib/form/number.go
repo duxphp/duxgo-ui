@@ -22,8 +22,8 @@ func NewNumber() *Number {
 	}
 }
 
-// SetBeforeNumber 前置文本
-func (a *Number) SetBeforeNumber(content any) *Number {
+// SetBeforeText 前置文本
+func (a *Number) SetBeforeText(content any) *Number {
 	a.before = map[string]any{
 		"vSlot:prefix": "",
 		"nodeName":     "span",
@@ -32,8 +32,8 @@ func (a *Number) SetBeforeNumber(content any) *Number {
 	return a
 }
 
-// SetAfterNumber 后置文本
-func (a *Number) SetAfterNumber(content any) *Number {
+// SetAfterText 后置文本
+func (a *Number) SetAfterText(content any) *Number {
 	a.after = map[string]any{
 		"vSlot:suffix": "",
 		"nodeName":     "span",
