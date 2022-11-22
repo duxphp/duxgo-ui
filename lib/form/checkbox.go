@@ -76,7 +76,7 @@ func (a *Checkbox) SaveValue(value any, data map[string]any) any {
 		marshal, _ := json.Marshal(value)
 		return marshal
 	} else {
-		values := value.([]string)
+		values := []string{}
 		for _, v := range value.([]any) {
 			values = append(values, cast.ToString(v))
 		}
