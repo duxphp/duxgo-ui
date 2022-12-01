@@ -19,7 +19,7 @@ type Table struct {
 	model        any
 	modelDB      *gorm.DB
 	modelOrder   []string
-	collect      func(filter map[string]any) []map[string]any
+	collect      func(filter map[string]any) []any
 	collectOrder []collectOrder
 	url          string
 	fieldMaps    map[string]string
@@ -51,8 +51,8 @@ func (t *Table) AddFields(data map[string]string) *Table {
 	return t
 }
 
-// SetDataFun 设置数据回调模式
-func (t *Table) SetDataFun(collect func(filter map[string]any) []map[string]any, primary string) *Table {
+// SetData 设置数据回调模式
+func (t *Table) SetData(collect func(filter map[string]any) []any, primary string) *Table {
 	t.collect = collect
 	t.primary = primary
 	return t
@@ -255,7 +255,7 @@ func (t *Table) Data(ctx echo.Context) map[string]any {
 	}
 
 	model := t.modelDB.Debug()
-	collect := []map[string]any{}
+	collect := []any{}
 	collectFilter := map[string]any{}
 
 	core.Logger.Debug().Str("point", "1").Msg("table_mark")
