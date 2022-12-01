@@ -254,7 +254,7 @@ func (t *Table) Data(ctx echo.Context) map[string]any {
 		panic("table Model or Data not set")
 	}
 
-	model := t.modelDB.Debug()
+	model := t.modelDB
 	collect := []any{}
 	collectFilter := map[string]any{}
 
