@@ -258,7 +258,6 @@ func (t *Table) Data(ctx echo.Context) map[string]any {
 	collect := []any{}
 	collectFilter := map[string]any{}
 
-	core.Logger.Debug().Str("point", "1").Msg("table_mark")
 	// 条件处理
 	where := map[string]any{}
 	for _, filter := range t.filters {
@@ -277,7 +276,6 @@ func (t *Table) Data(ctx echo.Context) map[string]any {
 			}
 		}
 	}
-	core.Logger.Debug().Str("point", "2").Msg("table_mark")
 
 	if len(where) > 0 && t.modelDB != nil {
 		model.Where(where)
@@ -308,11 +306,9 @@ func (t *Table) Data(ctx echo.Context) map[string]any {
 	}
 
 	// 集合回调数据
-	core.Logger.Debug().Str("point", "3").Msg("table_mark")
 	if t.collect != nil {
 		collect = t.collect(collectFilter)
 	}
-	core.Logger.Debug().Str("point", "4").Msg("table_mark")
 
 	// 字段处理
 	fields := []string{
@@ -417,7 +413,7 @@ func (t *Table) Data(ctx echo.Context) map[string]any {
 
 // filterData 过滤返回数据
 func (t *Table) filterData(listData []map[string]any, fields []string, formats map[string]func(any, map[string]any) any) []map[string]any {
-	core.Logger.Debug().Interface("list", listData).Send()
+	//core.Logger.Debug().Interface("list", listData).Send()
 	// 过滤列表字段
 	data := []map[string]any{}
 	for _, items := range listData {
