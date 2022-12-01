@@ -15,18 +15,12 @@ import (
 	"strings"
 )
 
-type collectOrder struct {
-	key  string
-	desc bool
-}
-
 type Table struct {
 	model        any
 	modelDB      *gorm.DB
-	collect      collection.ICollection
-	collectFun   func(filter map[string]any) collection.ICollection
-	collectOrder []collectOrder
 	modelOrder   []string
+	collect      func(filter map[string]any) []map[string]any
+	collectOrder []collectOrder
 	url          string
 	fieldMaps    map[string]string
 	back         bool
@@ -57,21 +51,19 @@ func (t *Table) AddFields(data map[string]string) *Table {
 	return t
 }
 
-// SetData 设置数据模式
-func (t *Table) SetData(collect collection.ICollection, primary string) *Table {
+// SetDataFun 设置数据回调模式
+func (t *Table) SetDataFun(collect func(filter map[string]any) []map[string]any, primary string) *Table {
 	t.collect = collect
 	t.primary = primary
 	return t
 }
 
-// SetDataFun 设置数据回调模式
-func (t *Table) SetDataFun(collectFun func(filter map[string]any) collection.ICollection, primary string) *Table {
-	t.collectFun = collectFun
-	t.primary = primary
-	return t
+// DataOrder 设置排序规则
+type collectOrder struct {
+	key  string
+	desc bool
 }
 
-// DataOrder 设置排序规则
 func (t *Table) DataOrder(key string, desc ...bool) *Table {
 	sort := false
 	if len(desc) > 0 {
@@ -258,12 +250,12 @@ func (t *Table) Render(ctx echo.Context) *node.TNode {
 
 // Data 渲染数据
 func (t *Table) Data(ctx echo.Context) map[string]any {
-	if t.modelDB == nil && t.collect == nil && t.collectFun == nil {
+	if t.modelDB == nil && t.collect == nil {
 		panic("table Model or Data not set")
 	}
 
 	model := t.modelDB.Debug()
-	collect := t.collect
+	collect := []map[string]any{}
 	collectFilter := map[string]any{}
 
 	core.Logger.Debug().Str("point", "1").Msg("table_mark")
@@ -275,18 +267,13 @@ func (t *Table) Data(ctx echo.Context) map[string]any {
 			// 集合条件
 			collectFilter[filter.Field] = value
 			// 模型处理
-			if t.modelDB != nil {
-				if filter.Where == nil {
-					where[filter.Field] = value
-				} else {
-					filter.Where(value, t.modelDB)
-				}
+			if t.modelDB == nil {
+				continue
 			}
-			// 集合处理
-			if t.collect != nil {
-				if filter.Collect == nil {
-					filter.Collect(&collect)
-				}
+			if filter.Where == nil {
+				where[filter.Field] = value
+			} else {
+				filter.Where(value, t.modelDB)
 			}
 		}
 	}
@@ -300,15 +287,9 @@ func (t *Table) Data(ctx echo.Context) map[string]any {
 	for index, tab := range t.tabs {
 		if tabValue == index {
 			collectFilter["tab"] = index
-			if tab.Where != nil {
-				// 模型处理
-				if t.model != nil {
-					tab.Where(t.modelDB)
-				}
-				// 集合处理
-				if t.collect != nil {
-					tab.Collect(&collect)
-				}
+			// 模型处理
+			if tab.Where != nil && t.model != nil {
+				tab.Where(t.modelDB)
 			}
 		}
 	}
@@ -321,7 +302,6 @@ func (t *Table) Data(ctx echo.Context) map[string]any {
 		if getSort == "" {
 			continue
 		}
-
 		if t.model != nil {
 			model.Order(column.Field + " " + getSort)
 		}
@@ -329,8 +309,8 @@ func (t *Table) Data(ctx echo.Context) map[string]any {
 
 	// 集合回调数据
 	core.Logger.Debug().Str("point", "3").Msg("table_mark")
-	if t.collectFun != nil {
-		collect = t.collectFun(collectFilter)
+	if t.collect != nil {
+		collect = t.collect(collectFilter)
 	}
 	core.Logger.Debug().Str("point", "4").Msg("table_mark")
 
@@ -357,8 +337,8 @@ func (t *Table) Data(ctx echo.Context) map[string]any {
 	if t.model != nil {
 		model.Count(&total)
 	}
-	if t.collect != nil || t.collectFun != nil {
-		total = int64(collect.Count())
+	if t.collect != nil {
+		total = int64(len(collect))
 	}
 	if t.tree {
 		t.limit = 10000
@@ -383,7 +363,6 @@ func (t *Table) Data(ctx echo.Context) map[string]any {
 				model.Order(order)
 			}
 		}
-
 		if t.tree {
 			model.Order("sort asc")
 		}
@@ -408,18 +387,20 @@ func (t *Table) Data(ctx echo.Context) map[string]any {
 		data = t.filterData(data, fields, formats)
 
 	}
-	if t.collect != nil || t.collectFun != nil {
+	// 集合处理
+	if t.collect != nil {
+		collectData := collection.NewObjCollection(data)
 		if t.collectOrder != nil {
 			for _, order := range t.collectOrder {
 				if order.desc {
-					collect = collect.SortByDesc(order.key)
+					collectData.SortByDesc(order.key)
 				} else {
-					collect = collect.SortBy(order.key)
+					collectData.SortBy(order.key)
 				}
 			}
 		}
-		ret, _ := collect.Slice(offset, pageQuery.Limit).ToJson()
-		json.Unmarshal(ret, &data)
+		ret, _ := collectData.Slice(offset, pageQuery.Limit).ToJson()
+		_ = json.Unmarshal(ret, &data)
 		if t.tree && len(data) > 0 {
 			data = function2.SliceToTree(data, t.primary, "parent_id", "children")
 		}

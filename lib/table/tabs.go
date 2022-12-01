@@ -2,16 +2,14 @@ package table
 
 import (
 	"github.com/duxphp/duxgo-ui/lib/node"
-	"github.com/jianfengye/collection"
 	"gorm.io/gorm"
 )
 
 // Tab 筛选结构
 type Tab struct {
-	Name    string
-	Icon    string
-	Where   func(*gorm.DB)
-	Collect func(*collection.ICollection)
+	Name  string
+	Icon  string
+	Where func(*gorm.DB)
 }
 
 // SetIcon 设置图标
@@ -23,12 +21,6 @@ func (a *Tab) SetIcon(icon string) *Tab {
 // SetWhere 设置条件
 func (a *Tab) SetWhere(where func(*gorm.DB)) *Tab {
 	a.Where = where
-	return a
-}
-
-// SetCollect 设置集合
-func (a *Tab) SetCollect(where func(*collection.ICollection)) *Tab {
-	a.Collect = where
 	return a
 }
 

@@ -2,7 +2,6 @@ package table
 
 import (
 	"github.com/duxphp/duxgo-ui/lib/node"
-	"github.com/jianfengye/collection"
 	"gorm.io/gorm"
 )
 
@@ -16,7 +15,6 @@ type Filter struct {
 	Name    string
 	Field   string
 	Where   func(string, *gorm.DB)
-	Collect func(*collection.ICollection)
 	Quick   bool
 	Default any
 	UI      IFilter
@@ -32,12 +30,6 @@ func (a *Filter) SetQuick(quick bool) *Filter {
 // SetWhere 设置条件
 func (a *Filter) SetWhere(where func(string, *gorm.DB)) *Filter {
 	a.Where = where
-	return a
-}
-
-// SetCollect 设置集合
-func (a *Filter) SetCollect(where func(*collection.ICollection)) *Filter {
-	a.Collect = where
 	return a
 }
 
