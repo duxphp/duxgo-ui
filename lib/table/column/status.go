@@ -47,6 +47,9 @@ func (a *Status) Render(element *table.Column) node.TNode {
 		switch key.(type) {
 		case int:
 			isNum = true
+			break
+		case bool:
+			isNum = true
 		}
 		vIf := fmt.Sprintf(`%v == '%v'`, field, key)
 		if isNum {
